@@ -27,7 +27,7 @@ type PropsType = {
 function App({demo = false}: PropsType) {
 
     const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
-    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+    const status = useSelector<AppRootStateType, string>((state) => state.app.status)
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const dispatch = useDispatch()
