@@ -3,6 +3,8 @@ import {authAPI} from "../api/todolists-api";
 import {setIsLoggedInAC} from "../features/auth-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
+export type InitialStateType = typeof initialState
+
 const initialState = {
     status: 'idle',
     error: null as string | null,
