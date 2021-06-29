@@ -11,14 +11,14 @@ import {
     Typography
 } from '@material-ui/core'
 import {Menu} from '@material-ui/icons'
-import {TodolistsList} from '../features/TodolistsList/TodolistsList'
+import {TodolistsList} from '../features/TodolistsList'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
-import {useDispatch, useSelector} from 'react-redux'
-import {AppRootStateType} from './store'
-import {initializeAppTC, RequestStatusType} from './app-reducer'
+import {useSelector} from 'react-redux'
+import {appActions} from '../features/Application'
 import {Redirect, Route, Switch} from 'react-router-dom'
-import {Login} from '../features/Login'
-import {logoutTC} from "../features/auth-reducer";
+import {selectIsInitialized, selectStatus} from "./selectors";
+import {authActions, authSelectors, Login} from "../features/Auth";
+import {useActions} from "../utils/redux-utils";
 
 type PropsType = {
     demo?: boolean
@@ -26,15 +26,16 @@ type PropsType = {
 
 function App({demo = false}: PropsType) {
 
-    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
-    const status = useSelector<AppRootStateType, string>((state) => state.app.status)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const isInitialized = useSelector(selectIsInitialized)
+    const status = useSelector(selectStatus)
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
 
-    const dispatch = useDispatch()
+    const {logout} = useActions(authActions)
+    const {initializeApp} = useActions(appActions)
 
     useEffect(() => {
         if (!demo) {
-            dispatch(initializeAppTC())
+            initializeApp()
         }
     })
     if (!isInitialized) {
@@ -44,9 +45,8 @@ function App({demo = false}: PropsType) {
         </div>
     }
     const logoutHandler = () => {
-        dispatch(logoutTC())
+        logout()
     }
-
 
     return (
         <div className="App">
